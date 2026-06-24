@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, HostListener, viewChild, ElementRef } from '@angular/core';
 import { HlmButton } from '@spartan-ng/helm/button';
 
 @Component({
@@ -16,4 +16,33 @@ export class ConfirmationModal {
   cancelLabel = input('Cancel');
   confirm = output<void>();
   cancel = output<void>();
+
+  private readonly dialogRef = viewChild<ElementRef<HTMLDivElement>>('dialog');
+
+  @HostListener('document:keydown.escape')
+  protected onEscape(): void {
+    if (this.visible()) {
+      this.cancel.emit();
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  protected onKeydown(event: KeyboardEvent): void {
+    if (!this.visible() || event.key !== 'Tab') return;
+    const dialog = this.dialogRef()?.nativeElement;
+    if (!dialog) return;
+    const focusable = dialog.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
 }

@@ -1,9 +1,11 @@
 @if (visible()) {
-  <div class="fixed inset-0 z-50 flex items-center justify-center">
+  <div #dialog class="fixed inset-0 z-50 flex items-center justify-center"
+       role="dialog" aria-modal="true"
+       [attr.aria-labelledby]="title() ? 'confirm-title' : null">
     <div class="fixed inset-0 bg-black/10 backdrop-blur-xs" (click)="cancel.emit()"></div>
     <div class="relative z-10 mx-4 w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-lg">
       @if (title()) {
-        <h3 class="mb-2 text-lg font-semibold text-foreground">{{ title() }}</h3>
+        <h3 id="confirm-title" class="mb-2 text-lg font-semibold text-foreground">{{ title() }}</h3>
       }
       @if (message()) {
         <p class="mb-6 text-sm text-muted-foreground">{{ message() }}</p>
