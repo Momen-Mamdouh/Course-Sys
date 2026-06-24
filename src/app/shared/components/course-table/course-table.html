@@ -26,14 +26,14 @@
           @if (showActions()) {
             <td hlmTd class="text-right">
               <div class="flex justify-end gap-1">
-                <button hlmBtn size="icon-xs" variant="ghost" (click)="view.emit(course)">
-                  <ng-icon name="lucideEye" size="16" />
+                <button hlmBtn size="icon-xs" variant="ghost" (click)="view.emit(course)" [attr.aria-label]="'View ' + course.courseName">
+                  <ng-icon name="lucideEye" size="16" aria-hidden="true" />
                 </button>
-                <button hlmBtn size="icon-xs" variant="ghost" (click)="edit.emit(course)">
-                  <ng-icon name="lucidePencil" size="16" />
+                <button hlmBtn size="icon-xs" variant="ghost" (click)="edit.emit(course)" [attr.aria-label]="'Edit ' + course.courseName">
+                  <ng-icon name="lucidePencil" size="16" aria-hidden="true" />
                 </button>
-                <button hlmBtn size="icon-xs" variant="ghost" (click)="delete.emit(course)">
-                  <ng-icon name="lucideTrash" size="16" />
+                <button hlmBtn size="icon-xs" variant="ghost" (click)="delete.emit(course)" [attr.aria-label]="'Delete ' + course.courseName">
+                  <ng-icon name="lucideTrash" size="16" aria-hidden="true" />
                 </button>
               </div>
             </td>
@@ -53,14 +53,14 @@
           <p class="text-sm text-muted-foreground">{{ course.instructorName }} · {{ course.category }}</p>
         </div>
         <div class="flex gap-1">
-          <button hlmBtn size="icon-xs" variant="ghost" (click)="view.emit(course)">
-            <ng-icon name="lucideEye" size="16" />
+          <button hlmBtn size="icon-xs" variant="ghost" (click)="view.emit(course)" [attr.aria-label]="'View ' + course.courseName">
+            <ng-icon name="lucideEye" size="16" aria-hidden="true" />
           </button>
-          <button hlmBtn size="icon-xs" variant="ghost" (click)="edit.emit(course)">
-            <ng-icon name="lucidePencil" size="16" />
+          <button hlmBtn size="icon-xs" variant="ghost" (click)="edit.emit(course)" [attr.aria-label]="'Edit ' + course.courseName">
+            <ng-icon name="lucidePencil" size="16" aria-hidden="true" />
           </button>
-          <button hlmBtn size="icon-xs" variant="ghost" (click)="delete.emit(course)">
-            <ng-icon name="lucideTrash" size="16" />
+          <button hlmBtn size="icon-xs" variant="ghost" (click)="delete.emit(course)" [attr.aria-label]="'Delete ' + course.courseName">
+            <ng-icon name="lucideTrash" size="16" aria-hidden="true" />
           </button>
         </div>
       </div>
