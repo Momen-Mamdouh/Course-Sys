@@ -1,0 +1,18 @@
+<div class="mx-auto max-w-2xl space-y-6 py-8">
+  <div hlmSkeleton class="h-8 w-48"></div>
+  <div class="rounded-lg border border-border bg-card p-6 space-y-4">
+    <div class="grid grid-cols-2 gap-4">
+      @for (item of fields; track item) {
+        <div>
+          <div hlmSkeleton class="mb-1 h-3 w-16"></div>
+          <div hlmSkeleton class="h-5 w-32"></div>
+        </div>
+      }
+    </div>
+    <div hlmSkeleton class="h-24 w-full rounded-md"></div>
+    <div class="flex gap-2">
+      <div hlmSkeleton class="h-9 w-20 rounded-md"></div>
+      <div hlmSkeleton class="h-9 w-20 rounded-md"></div>
+    </div>
+  </div>
+</div>

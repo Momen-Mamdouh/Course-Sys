@@ -1,0 +1,23 @@
+@if (visible()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="fixed inset-0 bg-black/10 backdrop-blur-xs" (click)="cancel.emit()"></div>
+    <div hlmAlertDialogContent class="relative z-10 mx-4">
+      <div hlmAlertDialogHeader>
+        @if (title()) {
+          <h3 hlmAlertDialogTitle>{{ title() }}</h3>
+        }
+        @if (message()) {
+          <p hlmAlertDialogDescription>{{ message() }}</p>
+        }
+      </div>
+      <div hlmAlertDialogFooter>
+        <button hlmAlertDialogCancel (click)="cancel.emit()">
+          {{ cancelLabel() }}
+        </button>
+        <button hlmAlertDialogAction variant="destructive" (click)="confirm.emit()">
+          {{ confirmLabel() }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,59 @@
+<div class="hidden sm:block">
+  <div hlmTableContainer>
+    <table hlmTable>
+      <thead hlmTHead>
+        <tr hlmTr>
+          @for (col of columns; track col) {
+            <th hlmTh><div hlmSkeleton class="h-4 w-20"></div></th>
+          }
+          @if (showActions()) {
+            <th hlmTh class="text-right"><div hlmSkeleton class="ml-auto h-4 w-16"></div></th>
+          }
+        </tr>
+      </thead>
+      <tbody hlmTBody>
+        @for (row of skeletonRows; track row) {
+          <tr hlmTr>
+            @for (col of columns; track col) {
+              <td hlmTd><div hlmSkeleton class="h-4" [class]="colWidth(col)"></div></td>
+            }
+            @if (showActions()) {
+              <td hlmTd class="text-right">
+                <div class="flex justify-end gap-1">
+                  <div hlmSkeleton class="size-6 rounded"></div>
+                  <div hlmSkeleton class="size-6 rounded"></div>
+                  <div hlmSkeleton class="size-6 rounded"></div>
+                </div>
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="space-y-3 sm:hidden">
+  @for (row of skeletonRows; track row) {
+    <div class="rounded-lg border border-border bg-card p-4">
+      <div class="flex items-start justify-between">
+        <div class="space-y-2 flex-1">
+          <div hlmSkeleton class="h-5 w-3/4"></div>
+          <div hlmSkeleton class="h-4 w-1/2"></div>
+        </div>
+        <div class="flex gap-1 ml-2">
+          <div hlmSkeleton class="size-8 rounded"></div>
+          <div hlmSkeleton class="size-8 rounded"></div>
+          <div hlmSkeleton class="size-8 rounded"></div>
+        </div>
+      </div>
+      <div class="mt-3 grid grid-cols-2 gap-2">
+        <div hlmSkeleton class="h-4 w-16"></div>
+        <div hlmSkeleton class="h-4 w-12"></div>
+        <div hlmSkeleton class="h-4 w-16"></div>
+        <div hlmSkeleton class="h-4 w-20"></div>
+      </div>
+      <div hlmSkeleton class="mt-2 h-3 w-24"></div>
+    </div>
+  }
+</div>

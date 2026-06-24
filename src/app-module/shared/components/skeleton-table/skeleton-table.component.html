@@ -1,0 +1,61 @@
+<div class="hidden sm:block">
+  <div hlmTableContainer>
+    <table hlmTable>
+      <thead hlmTHead>
+        <tr hlmTr>
+          <th hlmTh><div hlmSkeleton class="h-4 w-10"></div></th>
+          <th hlmTh><div hlmSkeleton class="h-4 w-20"></div></th>
+          <th hlmTh><div hlmSkeleton class="h-4 w-28"></div></th>
+          <th hlmTh><div hlmSkeleton class="h-4 w-20"></div></th>
+          <th hlmTh><div hlmSkeleton class="h-4 w-14"></div></th>
+          <th hlmTh><div hlmSkeleton class="h-4 w-16"></div></th>
+          <th hlmTh><div hlmSkeleton class="h-4 w-16"></div></th>
+          <th hlmTh><div hlmSkeleton class="h-4 w-24"></div></th>
+          <th *ngIf="showActions" hlmTh class="text-right"><div hlmSkeleton class="ml-auto h-4 w-16"></div></th>
+        </tr>
+      </thead>
+      <tbody hlmTBody>
+        <tr *ngFor="let row of skeletonRows" hlmTr>
+          <td hlmTd><div hlmSkeleton class="h-4 w-10"></div></td>
+          <td hlmTd><div hlmSkeleton class="h-4 w-32"></div></td>
+          <td hlmTd><div hlmSkeleton class="h-4 w-28"></div></td>
+          <td hlmTd><div hlmSkeleton class="h-4 w-20"></div></td>
+          <td hlmTd><div hlmSkeleton class="h-4 w-14"></div></td>
+          <td hlmTd><div hlmSkeleton class="h-4 w-16"></div></td>
+          <td hlmTd><div hlmSkeleton class="h-4 w-16"></div></td>
+          <td hlmTd><div hlmSkeleton class="h-4 w-24"></div></td>
+          <td *ngIf="showActions" hlmTd class="text-right">
+            <div class="flex justify-end gap-1">
+              <div hlmSkeleton class="size-6 rounded"></div>
+              <div hlmSkeleton class="size-6 rounded"></div>
+              <div hlmSkeleton class="size-6 rounded"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="space-y-3 sm:hidden">
+  <div *ngFor="let row of skeletonRows" class="rounded-lg border border-border bg-card p-4">
+    <div class="flex items-start justify-between">
+      <div class="space-y-2 flex-1">
+        <div hlmSkeleton class="h-5 w-3/4"></div>
+        <div hlmSkeleton class="h-4 w-1/2"></div>
+      </div>
+      <div class="flex gap-1 ml-2">
+        <div hlmSkeleton class="size-8 rounded"></div>
+        <div hlmSkeleton class="size-8 rounded"></div>
+        <div hlmSkeleton class="size-8 rounded"></div>
+      </div>
+    </div>
+    <div class="mt-3 grid grid-cols-2 gap-2">
+      <div hlmSkeleton class="h-4 w-16"></div>
+      <div hlmSkeleton class="h-4 w-12"></div>
+      <div hlmSkeleton class="h-4 w-16"></div>
+      <div hlmSkeleton class="h-4 w-20"></div>
+    </div>
+    <div hlmSkeleton class="mt-2 h-3 w-24"></div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="flex justify-center py-16">
+  <div hlmAlert variant="destructive" class="w-full max-w-md">
+    <ng-icon name="lucideTriangleAlert" size="24" />
+    <h3 hlmAlertTitle>{{ title }}</h3>
+    <p *ngIf="message" hlmAlertDescription>{{ message }}</p>
+    <div hlmAlertAction>
+      <button hlmBtn variant="destructive" size="sm" (click)="retry.emit()">
+        Try Again
+      </button>
+    </div>
+  </div>
+</div>
