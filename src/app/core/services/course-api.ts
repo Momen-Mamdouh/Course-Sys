@@ -36,7 +36,7 @@ export class CourseService {
     this.courses.update((list) => {
       const index = list.findIndex((c) => c.id === id);
       if (index === -1) return list;
-      updated = { ...list[index], ...changes, id };
+      updated = { ...list[index], ...changes, id, createdDate: list[index].createdDate };
       const copy = [...list];
       copy[index] = updated;
       return copy;
@@ -60,18 +60,22 @@ export class CourseService {
     const q = query.toLowerCase().trim();
     if (!q) return this.getCourses();
     const filtered = this.courses().filter((c) => c.courseName.toLowerCase().includes(q));
-    return of(filtered).pipe(delay(200));
+    return of([...filtered]).pipe(delay(200));
   }
 
   filterByStatus(status: string): Observable<Course[]> {
     if (!status || status === 'All') return this.getCourses();
     const filtered = this.courses().filter((c) => c.status === status);
-    return of(filtered).pipe(delay(200));
+    return of([...filtered]).pipe(delay(200));
   }
 
   private loadCourses(): Course[] {
-    const stored = localStorage.getItem(this.STORAGE_KEY);
-    if (stored) return JSON.parse(stored);
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch {
+      console.warn('Failed to parse stored courses, using defaults');
+    }
     return this.getDefaultCourses();
   }
 
@@ -80,13 +84,10 @@ export class CourseService {
   }
 
   private computeNextId(): number {
-    const stored = localStorage.getItem(this.STORAGE_KEY);
-    if (stored) {
-      const courses: Course[] = JSON.parse(stored);
-      return courses.length > 0 ? Math.max(...courses.map((c) => c.id)) + 1 : 1;
+    const existing = this.courses();
+    if (existing.length > 0) {
+      return Math.max(...existing.map((c) => c.id)) + 1;
     }
-    // Return 11 as ID if there is no stored courses in localStorage as all defaults are 10 ids from 1 to 10
-    // And this function return the next ID from the last one we have
     return 11;
   }
 

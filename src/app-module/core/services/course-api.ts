@@ -1,91 +1,95 @@
-import { Injectable, signal, computed } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { delay, map } from 'rxjs/operators';
 import { Course } from '../interfaces/course';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {
   private readonly STORAGE_KEY = 'courses';
-  private courses = signal<Course[]>(this.loadCourses());
-  private idCounter = signal(this.computeNextId());
+  private coursesSubject = new BehaviorSubject<Course[]>(this.loadCourses());
+  private idCounter = this.computeNextId();
 
-  readonly courseCount = computed(() => this.courses().length);
+  readonly courses$ = this.coursesSubject.asObservable();
+  readonly courseCount$ = this.coursesSubject.pipe(map(courses => courses.length));
 
   getCourses(): Observable<Course[]> {
-    return of([...this.courses()]).pipe(delay(300));
+    return of([...this.coursesSubject.getValue()]).pipe(delay(300));
   }
 
   getCourseById(id: number): Observable<Course | undefined> {
-    const course = this.courses().find(c => c.id === id);
+    const course = this.coursesSubject.getValue().find(c => c.id === id);
     return of(course ? { ...course } : undefined).pipe(delay(200));
   }
 
   createCourse(course: Omit<Course, 'id' | 'createdDate'>): Observable<Course> {
     const newCourse: Course = {
       ...course,
-      id: this.idCounter(),
+      id: this.idCounter++,
       createdDate: new Date().toISOString().split('T')[0],
     };
-    this.idCounter.update(id => id + 1);
-    this.courses.update(list => [...list, newCourse]);
+    const updated = [...this.coursesSubject.getValue(), newCourse];
+    this.coursesSubject.next(updated);
     this.persistCourses();
     return of({ ...newCourse }).pipe(delay(200));
   }
 
   updateCourse(id: number, changes: Partial<Course>): Observable<Course | null> {
-    let updated: Course | null = null;
-    this.courses.update(list => {
-      const index = list.findIndex(c => c.id === id);
-      if (index === -1) return list;
-      updated = { ...list[index], ...changes, id };
-      const copy = [...list];
-      copy[index] = updated;
-      return copy;
-    });
-    if (updated) this.persistCourses();
-    return of(updated ? { ...updated as Course } : null).pipe(delay(200));
+    const current = this.coursesSubject.getValue();
+    const index = current.findIndex(c => c.id === id);
+    if (index === -1) return of(null).pipe(delay(200));
+
+    const updated = { ...current[index], ...changes, id, createdDate: current[index].createdDate };
+    const copy = [...current];
+    copy[index] = updated;
+    this.coursesSubject.next(copy);
+    this.persistCourses();
+    return of({ ...updated }).pipe(delay(200));
   }
 
   deleteCourse(id: number): Observable<boolean> {
-    let found = false;
-    this.courses.update(list => {
-      const filtered = list.filter(c => c.id !== id);
-      found = filtered.length < list.length;
-      return filtered;
-    });
-    if (found) this.persistCourses();
+    const current = this.coursesSubject.getValue();
+    const filtered = current.filter(c => c.id !== id);
+    const found = filtered.length < current.length;
+    if (found) {
+      this.coursesSubject.next(filtered);
+      this.persistCourses();
+    }
     return of(found).pipe(delay(200));
   }
 
   searchCourses(query: string): Observable<Course[]> {
     const q = query.toLowerCase().trim();
     if (!q) return this.getCourses();
-    const filtered = this.courses().filter(c =>
+    const filtered = this.coursesSubject.getValue().filter(c =>
       c.courseName.toLowerCase().includes(q)
     );
-    return of(filtered).pipe(delay(200));
+    return of([...filtered]).pipe(delay(200));
   }
 
   filterByStatus(status: string): Observable<Course[]> {
     if (!status || status === 'All') return this.getCourses();
-    const filtered = this.courses().filter(c => c.status === status);
-    return of(filtered).pipe(delay(200));
+    const filtered = this.coursesSubject.getValue().filter(c => c.status === status);
+    return of([...filtered]).pipe(delay(200));
   }
 
   private loadCourses(): Course[] {
-    const stored = localStorage.getItem(this.STORAGE_KEY);
-    if (stored) return JSON.parse(stored);
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch {
+      console.warn('Failed to parse stored courses, using defaults');
+    }
     return this.getDefaultCourses();
   }
 
   private persistCourses(): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.courses()));
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.coursesSubject.getValue()));
   }
 
   private computeNextId(): number {
-    const stored = localStorage.getItem(this.STORAGE_KEY);
-    if (stored) {
-      const courses: Course[] = JSON.parse(stored);
-      return courses.length > 0 ? Math.max(...courses.map(c => c.id)) + 1 : 1;
+    const existing = this.loadCourses();
+    if (existing.length > 0) {
+      return Math.max(...existing.map(c => c.id)) + 1;
     }
     return 11;
   }
