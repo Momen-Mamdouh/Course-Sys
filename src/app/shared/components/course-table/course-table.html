@@ -1,0 +1,78 @@
+<div hlmTableContainer class="hidden sm:block">
+  <table hlmTable>
+    <thead hlmTHead>
+      <tr hlmTr>
+        @for (col of columns; track col.key) {
+          <th hlmTh>{{ col.label }}</th>
+        }
+        @if (showActions()) {
+          <th hlmTh class="text-right">Actions</th>
+        }
+      </tr>
+    </thead>
+    <tbody hlmTBody>
+      @for (course of courses(); track course.id) {
+        <tr hlmTr>
+          <td hlmTd class="font-medium">{{ course.id }}</td>
+          <td hlmTd class="font-medium">{{ course.courseName }}</td>
+          <td hlmTd>{{ course.instructorName }}</td>
+          <td hlmTd>{{ course.category }}</td>
+          <td hlmTd>{{ course.duration }}h</td>
+          <td hlmTd>{{ course.price | currency }}</td>
+          <td hlmTd>
+            <span hlmBadge [variant]="badgeVariant(course.status)">{{ course.status }}</span>
+          </td>
+          <td hlmTd>{{ course.createdDate }}</td>
+          @if (showActions()) {
+            <td hlmTd class="text-right">
+              <div class="flex justify-end gap-1">
+                <button hlmBtn size="icon-xs" variant="ghost" (click)="view.emit(course)">
+                  <ng-icon name="lucideEye" size="16" />
+                </button>
+                <button hlmBtn size="icon-xs" variant="ghost" (click)="edit.emit(course)">
+                  <ng-icon name="lucidePencil" size="16" />
+                </button>
+                <button hlmBtn size="icon-xs" variant="ghost" (click)="delete.emit(course)">
+                  <ng-icon name="lucideTrash" size="16" />
+                </button>
+              </div>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<div class="space-y-3 sm:hidden">
+  @for (course of courses(); track course.id) {
+    <div class="rounded-lg border border-border bg-card p-4">
+      <div class="flex items-start justify-between">
+        <div>
+          <h3 class="font-medium text-foreground">{{ course.courseName }}</h3>
+          <p class="text-sm text-muted-foreground">{{ course.instructorName }} · {{ course.category }}</p>
+        </div>
+        <div class="flex gap-1">
+          <button hlmBtn size="icon-xs" variant="ghost" (click)="view.emit(course)">
+            <ng-icon name="lucideEye" size="16" />
+          </button>
+          <button hlmBtn size="icon-xs" variant="ghost" (click)="edit.emit(course)">
+            <ng-icon name="lucidePencil" size="16" />
+          </button>
+          <button hlmBtn size="icon-xs" variant="ghost" (click)="delete.emit(course)">
+            <ng-icon name="lucideTrash" size="16" />
+          </button>
+        </div>
+      </div>
+      <div class="mt-2 grid grid-cols-2 gap-1 text-sm">
+        <span class="text-muted-foreground">Price:</span>
+        <span>{{ course.price | currency }}</span>
+        <span class="text-muted-foreground">Duration:</span>
+        <span>{{ course.duration }}h</span>
+        <span class="text-muted-foreground">Status:</span>
+        <span><span hlmBadge [variant]="badgeVariant(course.status)">{{ course.status }}</span></span>
+      </div>
+      <p class="mt-2 text-xs text-muted-foreground">Created: {{ course.createdDate }}</p>
+    </div>
+  }
+</div>

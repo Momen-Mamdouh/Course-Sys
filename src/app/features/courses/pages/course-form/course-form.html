@@ -1,0 +1,79 @@
+<div class="mx-auto max-w-2xl px-4 py-8">
+  <button hlmBtn variant="ghost" size="sm" class="mb-4" (click)="goBack()">
+    <ng-icon name="lucideChevronLeft" size="16" class="mr-1" />
+    Back to Courses
+  </button>
+
+  <div class="rounded-lg border border-border bg-card p-6">
+    <h1 class="mb-6 text-2xl font-bold text-foreground">
+      {{ isEdit() ? 'Edit Course' : 'Add Course' }}
+    </h1>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div class="space-y-1">
+        <label hlmLabel for="courseName">Course Name</label>
+        <input hlmInput id="courseName" formControlName="courseName" class="w-full" placeholder="Enter course name" />
+        @if (form.get('courseName')?.invalid && form.get('courseName')?.touched) {
+          <p class="text-sm text-destructive">Course name is required.</p>
+        }
+      </div>
+
+      <div class="space-y-1">
+        <label hlmLabel for="instructorName">Instructor</label>
+        <input hlmInput id="instructorName" formControlName="instructorName" class="w-full" placeholder="Enter instructor name" />
+        @if (form.get('instructorName')?.invalid && form.get('instructorName')?.touched) {
+          <p class="text-sm text-destructive">Instructor name is required.</p>
+        }
+      </div>
+
+      <div class="space-y-1">
+        <label hlmLabel for="category">Category</label>
+        <input hlmInput id="category" formControlName="category" class="w-full" placeholder="e.g. Web Development" />
+        @if (form.get('category')?.invalid && form.get('category')?.touched) {
+          <p class="text-sm text-destructive">Category is required.</p>
+        }
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="space-y-1">
+          <label hlmLabel for="duration">Duration (hours)</label>
+          <input hlmInput id="duration" type="number" formControlName="duration" class="w-full" min="1" />
+          @if (form.get('duration')?.invalid && form.get('duration')?.touched) {
+            <p class="text-sm text-destructive">Valid duration required.</p>
+          }
+        </div>
+        <div class="space-y-1">
+          <label hlmLabel for="price">Price ($)</label>
+          <input hlmInput id="price" type="number" formControlName="price" class="w-full" min="0" />
+          @if (form.get('price')?.invalid && form.get('price')?.touched) {
+            <p class="text-sm text-destructive">Valid price required.</p>
+          }
+        </div>
+      </div>
+
+      <div class="space-y-1">
+        <label hlmLabel for="status">Status</label>
+        <hlm-native-select formControlName="status" class="w-full">
+          <option value="Active">Active</option>
+          <option value="Draft">Draft</option>
+          <option value="Archived">Archived</option>
+        </hlm-native-select>
+      </div>
+
+      <div class="space-y-1">
+        <label hlmLabel for="description">Description</label>
+        <textarea hlmTextarea id="description" formControlName="description" class="w-full min-h-[100px]" rows="4" placeholder="Course description..."></textarea>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button hlmBtn type="button" variant="outline" (click)="goBack()">Cancel</button>
+        <button hlmBtn type="submit" [disabled]="form.invalid || isSaving()">
+          @if (isSaving()) {
+            <hlm-spinner class="mr-1" size="16" />
+          }
+          {{ isEdit() ? 'Update' : 'Create' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="flex justify-center py-16">
+  <div hlmEmpty>
+    <div hlmEmptyContent>
+      <div hlmEmptyMedia variant="icon">
+        <ng-icon name="lucideInbox" size="24" />
+      </div>
+      <h3 hlmEmptyTitle>{{ title() }}</h3>
+      @if (message()) {
+        <p hlmEmptyDescription>{{ message() }}</p>
+      }
+      @if (actionLabel()) {
+        <button hlmBtn variant="outline" size="sm" (click)="action.emit()">
+          {{ actionLabel() }}
+        </button>
+      }
+    </div>
+  </div>
+</div>

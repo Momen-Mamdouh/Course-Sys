@@ -1,0 +1,15 @@
+<div class="relative">
+  <input
+    hlmInput
+    type="text"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    (input)="onInput($event)"
+    class="pl-10"
+  />
+  <ng-icon
+    name="lucideSearch"
+    class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+    size="16"
+  />
+</div>
