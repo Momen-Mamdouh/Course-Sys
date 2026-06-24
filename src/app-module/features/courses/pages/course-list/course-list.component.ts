@@ -4,6 +4,7 @@ import { CourseService } from '@module/core/services/course-api';
 import { Course } from '@module/core/interfaces/course';
 import { ErrorInfo } from '@module/core/interfaces/error-info';
 import { toast } from '@spartan-ng/brain/sonner';
+import { TranslationService } from '@module/core/services/translation-api';
 
 @Component({
   selector: 'app-module-course-list',
@@ -17,15 +18,28 @@ export class CourseList implements OnInit {
   isLoading = true;
   error: ErrorInfo | null = null;
   searchQuery = '';
+  selectedStatus = 'All';
   allCourses: Course[] = [];
 
   showDeleteModal = false;
   deletingCourse: Course | null = null;
 
+  readonly statuses = [
+    { value: 'All', key: 'filter.all' },
+    { value: 'Active', key: 'course.form.statusActive' },
+    { value: 'Draft', key: 'course.form.statusDraft' },
+    { value: 'Archived', key: 'course.form.statusArchived' },
+  ];
+
+  test() {
+    console.log('hi');
+  }
+
   constructor(
     private courseService: CourseService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private translationService: TranslationService,
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +66,8 @@ export class CourseList implements OnInit {
 
   onSearch(query: string): void {
     this.searchQuery = query;
+    this.applyFilter();
+    this.cdr.markForCheck();
     if (query.trim()) {
       this.isLoading = true;
       this.error = null;
@@ -72,8 +88,34 @@ export class CourseList implements OnInit {
     }
   }
 
+  itemToString = (value: string | null): string => {
+    const option = this.statuses.find((s) => s.value === value);
+
+    return option ? this.translationService.translate(option.key) : '';
+  };
+
+  onStatusChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+
+    this.selectedStatus = value;
+    this.applyFilter();
+    this.cdr.markForCheck();
+  }
+
   private applyFilter(): void {
-    this.courses = [...this.allCourses];
+    let filtered = [...this.allCourses];
+
+    if (this.searchQuery.trim()) {
+      const q = this.searchQuery.toLowerCase().trim();
+
+      filtered = filtered.filter((course) => course.courseName.toLowerCase().includes(q));
+    }
+
+    if (this.selectedStatus !== 'All') {
+      filtered = filtered.filter((course) => course.status === this.selectedStatus);
+    }
+
+    this.courses = filtered;
   }
 
   onAdd(): void {

@@ -1,10 +1,11 @@
 {
-  "app.title": "ElectroPi Task",
+  "app.title": "Coursa",
   "nav.courses": "Courses",
   "nav.addCourse": "Add Course",
   "nav.backToCourses": "Back to Courses",
   "search.placeholder": "Search courses...",
   "search.ariaLabel": "Search courses",
+  "filter.all": "All",
   "course.addCourse": "Add Course",
   "course.editCourse": "Edit Course",
   "course.edit": "Edit",

@@ -8,6 +8,7 @@ import { toast } from '@spartan-ng/brain/sonner';
 import { CourseService } from '@/core/services/course-api';
 import { Course } from '@/core/interfaces/course';
 import { ErrorInfo } from '@/core/interfaces/error-info';
+import { TranslatePipe } from '@/shared/pipes/translate.pipe';
 import { SkeletonDetail } from '@/shared/components/skeleton-detail/skeleton-detail';
 import { ErrorState } from '@/shared/components/error-state/error-state';
 import { ConfirmationModal } from '@/shared/components/confirmation-modal/confirmation-modal';
@@ -16,7 +17,7 @@ import { ConfirmationModal } from '@/shared/components/confirmation-modal/confir
   selector: 'app-course-detail',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CurrencyPipe, NgIcon,
+    CurrencyPipe, NgIcon, TranslatePipe,
     HlmBadge, HlmButton,
     SkeletonDetail, ErrorState, ConfirmationModal,
   ],

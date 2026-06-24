@@ -1,10 +1,11 @@
 {
-  "app.title": "إلكترو باي تا سك",
+  "app.title": "كورسا",
   "nav.courses": "الدورات",
   "nav.addCourse": "إضافة دورة",
   "nav.backToCourses": "العودة إلى الدورات",
   "search.placeholder": "ابحث عن دورات...",
   "search.ariaLabel": "ابحث عن دورات",
+  "filter.all": "الكل",
   "course.addCourse": "إضافة دورة",
   "course.editCourse": "تعديل الدورة",
   "course.edit": "تعديل",

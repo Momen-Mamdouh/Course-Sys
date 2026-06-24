@@ -1,8 +1,13 @@
 <header class="border-b border-border bg-card">
   <div class="mx-auto flex h-14 max-w-6xl items-center px-4">
     <a routerLink="/courses" class="text-lg font-bold text-foreground hover:text-primary transition-colors">
-      ElectroPi Task
+      {{ 'app.title' | translate }}
     </a>
+    <div class="flex items-center gap-2 ms-auto">
+      <button hlmBtn variant="ghost" size="sm" (click)="switchLang()" [attr.aria-label]="'language.switch' | translate">
+        <ng-icon name="lucideLanguages" size="16" />
+      </button>
+    </div>
   </div>
 </header>
 <main>

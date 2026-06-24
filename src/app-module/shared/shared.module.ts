@@ -20,6 +20,7 @@ import { SearchInput } from './components/search-input/search-input.component';
 import { SkeletonDetail } from './components/skeleton-detail/skeleton-detail.component';
 import { SkeletonTable } from './components/skeleton-table/skeleton-table.component';
 import { StatusBadge } from './components/status-badge/status-badge.component';
+import { TranslatePipe } from './pipes/translate.pipe';
 
 @NgModule({
   declarations: [
@@ -47,8 +48,10 @@ import { StatusBadge } from './components/status-badge/status-badge.component';
     ...HlmAlertDialogImports,
     ...HlmEmptyImports,
     ...HlmTableImports,
+    TranslatePipe,
   ],
   exports: [
+    TranslatePipe,
     SearchInput,
     StatusBadge,
     LoadingIndicator,

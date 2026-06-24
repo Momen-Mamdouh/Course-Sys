@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgIconsModule } from '@ng-icons/core';
+import { NgIconsModule, NgIcon } from '@ng-icons/core';
 import {
   lucideChevronLeft,
   lucideCircleCheck,
   lucideEye,
   lucideInbox,
   lucideInfo,
+  lucideLanguages,
   lucideLoader2,
   lucideOctagonX,
   lucidePencil,
@@ -16,6 +17,7 @@ import {
   lucideTrash,
   lucideX,
 } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
 import { AppRoutingModule } from './app-routing.module';
 import { App } from './app';
 import { SharedModule } from './shared/shared.module';
@@ -26,12 +28,15 @@ import { SharedModule } from './shared/shared.module';
     BrowserModule,
     AppRoutingModule,
     SharedModule,
+    HlmButton,
+    NgIcon,
     NgIconsModule.withIcons({
       lucideChevronLeft,
       lucideCircleCheck,
       lucideEye,
       lucideInbox,
       lucideInfo,
+      lucideLanguages,
       lucideLoader2,
       lucideOctagonX,
       lucidePencil,

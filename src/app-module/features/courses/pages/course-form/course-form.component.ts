@@ -20,13 +20,13 @@ export class CourseForm implements OnInit {
   private courseId = 0;
 
   form = new FormGroup({
-    courseName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    instructorName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    category: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    courseName: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    instructorName: new FormControl('', [Validators.required]),
+    category: new FormControl('', [Validators.required]),
     duration: new FormControl(1, [Validators.required, Validators.min(1)]),
     price: new FormControl(0, [Validators.required, Validators.min(0)]),
     status: new FormControl<'Active' | 'Draft' | 'Archived'>('Draft', Validators.required),
-    description: new FormControl(''),
+    description: new FormControl('', [Validators.max(500)]),
   });
 
   constructor(
@@ -108,7 +108,9 @@ export class CourseForm implements OnInit {
       },
       error: () => {
         this.isSaving = false;
-        toast.error(this.isEdit ? 'Failed to update course' : 'Failed to create course', { description: 'Please try again.' });
+        toast.error(this.isEdit ? 'Failed to update course' : 'Failed to create course', {
+          description: 'Please try again.',
+        });
       },
     });
   }

@@ -1,51 +1,54 @@
-<div class="mx-auto max-w-6xl px-4 py-8">
-  <div class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-foreground">Courses</h1>
+<div class="mx-auto px-4 py-8 max-w-6xl">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="font-bold text-foreground text-2xl">{{ 'nav.courses' | translate }}</h1>
     <button hlmBtn (click)="onAdd()">
-      <ng-icon name="lucidePlus" size="16" class="mr-1" />
-      Add Course
+      <ng-icon name="lucidePlus" size="16" class="me-1" />
+      {{ 'course.addCourse' | translate }}
     </button>
   </div>
 
-  <div class="mb-4">
-    <app-module-search-input
-      [value]="searchQuery"
-      (valueChange)="onSearch($event)"
-    />
+  <div class="flex items-center gap-4 mb-4">
+    <div class="flex-1">
+      <app-module-search-input [value]="searchQuery" (valueChange)="onSearch($event)"
+        [placeholder]="'search.placeholder' | translate" />
+    </div>
+
+    <div class="w-56 shrink-0">
+      <select hlmNativeSelect [value]="selectedStatus" (change)="onStatusChange($event!)" class="w-full">
+        <option value="All">
+          {{ 'filter.all' | translate }}
+        </option>
+
+        <option value="Active">
+          {{ 'course.form.statusActive' | translate }}
+        </option>
+
+        <option value="Draft">
+          {{ 'course.form.statusDraft' | translate }}
+        </option>
+
+        <option value="Archived">
+          {{ 'course.form.statusArchived' | translate }}
+        </option>
+      </select>
+    </div>
   </div>
 
   <app-module-skeleton-table *ngIf="isLoading" [showActions]="true" />
 
-  <app-module-error-state
-    *ngIf="!isLoading && error"
-    [title]="error.title"
-    [message]="error.message"
-    (retry)="loadCourses()"
-  />
+  <app-module-error-state *ngIf="!isLoading && error" [title]="error.title" [message]="error.message"
+    (retry)="loadCourses()" />
 
-  <app-module-empty-state
-    *ngIf="!isLoading && !error && courses.length === 0"
-    [title]="searchQuery ? 'No matching courses' : 'No courses yet'"
-    [message]="searchQuery ? 'Try a different search term.' : 'Get started by adding your first course.'"
-    [actionLabel]="searchQuery ? '' : 'Add Course'"
-    (action)="onAdd()"
-  />
+  <app-module-empty-state *ngIf="!isLoading && !error && courses.length === 0"
+    [title]="(searchQuery ? 'empty.noMatching' : 'empty.noCourses') | translate"
+    [message]="(searchQuery ? 'empty.noMatchingMessage' : 'empty.noCoursesMessage') | translate"
+    [actionLabel]="searchQuery ? '' : ('course.addCourse' | translate)" (action)="onAdd()" />
 
-  <app-module-course-table
-    *ngIf="!isLoading && !error && courses.length > 0"
-    [courses]="courses"
-    (view)="onView($event)"
-    (edit)="onEdit($event)"
-    (delete)="onDelete($event)"
-  />
+  <app-module-course-table *ngIf="!isLoading && !error && courses.length > 0" [courses]="courses"
+    (view)="onView($event)" (edit)="onEdit($event)" (delete)="onDelete($event)" />
 </div>
 
-<app-module-confirmation-modal
-  [visible]="showDeleteModal"
-  title="Delete Course"
-  [message]="'Are you sure you want to delete ' + (deletingCourse?.courseName || '') + '?'"
-  confirmLabel="Delete"
-  cancelLabel="Cancel"
-  (confirm)="onDeleteConfirm()"
-  (cancel)="onDeleteCancel()"
-/>
+<app-module-confirmation-modal [visible]="showDeleteModal" [title]="'confirm.deleteCourseTitle' | translate"
+  [message]="'confirm.deleteCourseMessage' | translate : { courseName: deletingCourse?.courseName || '' }"
+  [confirmLabel]="'course.delete' | translate" [cancelLabel]="'action.cancel' | translate" (confirm)="onDeleteConfirm()"
+  (cancel)="onDeleteCancel()" />
