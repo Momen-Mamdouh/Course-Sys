@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CourseService } from '@module/core/services/course-api';
 import { Course } from '@module/core/interfaces/course';
 import { ErrorInfo } from '@module/core/interfaces/error-info';
+import { toast } from '@spartan-ng/brain/sonner';
 
 @Component({
   selector: 'app-module-course-list',
@@ -52,9 +53,19 @@ export class CourseList implements OnInit {
   onSearch(query: string): void {
     this.searchQuery = query;
     if (query.trim()) {
-      this.courseService.searchCourses(query).subscribe((courses) => {
-        this.courses = courses;
-        this.cdr.markForCheck();
+      this.isLoading = true;
+      this.error = null;
+      this.courseService.searchCourses(query).subscribe({
+        next: (courses) => {
+          this.courses = courses;
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.error = { title: 'Search failed', message: 'Please try again.' };
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
       });
     } else {
       this.applyFilter();
@@ -85,11 +96,20 @@ export class CourseList implements OnInit {
   onDeleteConfirm(): void {
     const course = this.deletingCourse;
     if (course) {
-      this.courseService.deleteCourse(course.id).subscribe(() => {
-        this.showDeleteModal = false;
-        this.deletingCourse = null;
-        this.cdr.markForCheck();
-        this.loadCourses();
+      this.courseService.deleteCourse(course.id).subscribe({
+        next: () => {
+          this.showDeleteModal = false;
+          this.deletingCourse = null;
+          this.cdr.markForCheck();
+          toast.success('Course deleted');
+          this.loadCourses();
+        },
+        error: () => {
+          this.showDeleteModal = false;
+          this.deletingCourse = null;
+          this.cdr.markForCheck();
+          toast.error('Failed to delete course', { description: 'Please try again.' });
+        },
       });
     } else {
       this.showDeleteModal = false;

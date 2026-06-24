@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/cor
 import { Router } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import { HlmButton } from '@spartan-ng/helm/button';
+import { toast } from '@spartan-ng/brain/sonner';
 import { CourseService } from '@/core/services/course-api';
 import { Course } from '@/core/interfaces/course';
 import { ErrorInfo } from '@/core/interfaces/error-info';
@@ -59,8 +60,17 @@ export class CourseList {
   protected onSearch(query: string): void {
     this.searchQuery.set(query);
     if (query.trim()) {
-      this.courseService.searchCourses(query).subscribe((courses) => {
-        this.courses.set(courses);
+      this.isLoading.set(true);
+      this.error.set(null);
+      this.courseService.searchCourses(query).subscribe({
+        next: (courses) => {
+          this.courses.set(courses);
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.error.set({ title: 'Search failed', message: 'Please try again.' });
+          this.isLoading.set(false);
+        },
       });
     } else {
       this.applyFilter();
@@ -91,10 +101,18 @@ export class CourseList {
   protected onDeleteConfirm(): void {
     const course = this.deletingCourse();
     if (course) {
-      this.courseService.deleteCourse(course.id).subscribe(() => {
-        this.showDeleteModal.set(false);
-        this.deletingCourse.set(null);
-        this.loadCourses();
+      this.courseService.deleteCourse(course.id).subscribe({
+        next: () => {
+          this.showDeleteModal.set(false);
+          this.deletingCourse.set(null);
+          toast.success('Course deleted');
+          this.loadCourses();
+        },
+        error: () => {
+          this.showDeleteModal.set(false);
+          this.deletingCourse.set(null);
+          toast.error('Failed to delete course', { description: 'Please try again.' });
+        },
       });
     } else {
       this.showDeleteModal.set(false);

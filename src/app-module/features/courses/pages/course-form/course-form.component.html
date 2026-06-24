@@ -4,7 +4,16 @@
     Back to Courses
   </button>
 
-  <div class="rounded-lg border border-border bg-card p-6">
+  <app-module-loading-indicator *ngIf="isLoading" text="Loading course..." />
+
+  <app-module-error-state
+    *ngIf="!isLoading && error"
+    [title]="error.title"
+    [message]="error.message"
+    (retry)="loadCourse()"
+  />
+
+  <div *ngIf="!isLoading && !error" class="rounded-lg border border-border bg-card p-6">
     <h1 class="mb-6 text-2xl font-bold text-foreground">
       {{ isEdit ? 'Edit Course' : 'Add Course' }}
     </h1>
@@ -12,41 +21,66 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
       <div class="space-y-1">
         <label hlmLabel for="courseName">Course Name</label>
-        <input hlmInput id="courseName" formControlName="courseName" class="w-full" placeholder="Enter course name" />
-        <p class="text-sm text-destructive" *ngIf="form.get('courseName')?.invalid && form.get('courseName')?.touched">
+        <input hlmInput id="courseName" formControlName="courseName" class="w-full"
+          [class.border-destructive]="form.get('courseName')?.invalid && form.get('courseName')?.touched"
+          placeholder="Enter course name" />
+        <p class="text-sm text-destructive" *ngIf="form.get('courseName')?.hasError('required') && form.get('courseName')?.touched">
           Course name is required.
+        </p>
+        <p class="text-sm text-destructive" *ngIf="form.get('courseName')?.hasError('minlength') && form.get('courseName')?.touched">
+          Course name must be at least 2 characters.
         </p>
       </div>
 
       <div class="space-y-1">
         <label hlmLabel for="instructorName">Instructor</label>
-        <input hlmInput id="instructorName" formControlName="instructorName" class="w-full" placeholder="Enter instructor name" />
-        <p class="text-sm text-destructive" *ngIf="form.get('instructorName')?.invalid && form.get('instructorName')?.touched">
+        <input hlmInput id="instructorName" formControlName="instructorName" class="w-full"
+          [class.border-destructive]="form.get('instructorName')?.invalid && form.get('instructorName')?.touched"
+          placeholder="Enter instructor name" />
+        <p class="text-sm text-destructive" *ngIf="form.get('instructorName')?.hasError('required') && form.get('instructorName')?.touched">
           Instructor name is required.
+        </p>
+        <p class="text-sm text-destructive" *ngIf="form.get('instructorName')?.hasError('minlength') && form.get('instructorName')?.touched">
+          Instructor name must be at least 2 characters.
         </p>
       </div>
 
       <div class="space-y-1">
         <label hlmLabel for="category">Category</label>
-        <input hlmInput id="category" formControlName="category" class="w-full" placeholder="e.g. Web Development" />
-        <p class="text-sm text-destructive" *ngIf="form.get('category')?.invalid && form.get('category')?.touched">
+        <input hlmInput id="category" formControlName="category" class="w-full"
+          [class.border-destructive]="form.get('category')?.invalid && form.get('category')?.touched"
+          placeholder="e.g. Web Development" />
+        <p class="text-sm text-destructive" *ngIf="form.get('category')?.hasError('required') && form.get('category')?.touched">
           Category is required.
+        </p>
+        <p class="text-sm text-destructive" *ngIf="form.get('category')?.hasError('minlength') && form.get('category')?.touched">
+          Category must be at least 2 characters.
         </p>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div class="space-y-1">
           <label hlmLabel for="duration">Duration (hours)</label>
-          <input hlmInput id="duration" type="number" formControlName="duration" class="w-full" min="1" />
-          <p class="text-sm text-destructive" *ngIf="form.get('duration')?.invalid && form.get('duration')?.touched">
-            Valid duration required.
+          <input hlmInput id="duration" type="number" formControlName="duration" class="w-full"
+            [class.border-destructive]="form.get('duration')?.invalid && form.get('duration')?.touched"
+            min="1" />
+          <p class="text-sm text-destructive" *ngIf="form.get('duration')?.hasError('required') && form.get('duration')?.touched">
+            Duration is required.
+          </p>
+          <p class="text-sm text-destructive" *ngIf="form.get('duration')?.hasError('min') && form.get('duration')?.touched">
+            Minimum duration is 1 hour.
           </p>
         </div>
         <div class="space-y-1">
           <label hlmLabel for="price">Price ($)</label>
-          <input hlmInput id="price" type="number" formControlName="price" class="w-full" min="0" />
-          <p class="text-sm text-destructive" *ngIf="form.get('price')?.invalid && form.get('price')?.touched">
-            Valid price required.
+          <input hlmInput id="price" type="number" formControlName="price" class="w-full"
+            [class.border-destructive]="form.get('price')?.invalid && form.get('price')?.touched"
+            min="0" />
+          <p class="text-sm text-destructive" *ngIf="form.get('price')?.hasError('required') && form.get('price')?.touched">
+            Price is required.
+          </p>
+          <p class="text-sm text-destructive" *ngIf="form.get('price')?.hasError('min') && form.get('price')?.touched">
+            Price cannot be negative.
           </p>
         </div>
       </div>

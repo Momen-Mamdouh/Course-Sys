@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmButton } from '@spartan-ng/helm/button';
+import { toast } from '@spartan-ng/brain/sonner';
 import { CourseService } from '@/core/services/course-api';
 import { Course } from '@/core/interfaces/course';
 import { ErrorInfo } from '@/core/interfaces/error-info';
@@ -71,9 +72,16 @@ export class CourseDetail {
   }
 
   protected onDeleteConfirm(): void {
-    this.courseService.deleteCourse(this.courseId).subscribe(() => {
-      this.showDeleteModal.set(false);
-      this.router.navigate(['/courses']);
+    this.courseService.deleteCourse(this.courseId).subscribe({
+      next: () => {
+        this.showDeleteModal.set(false);
+        toast.success('Course deleted');
+        this.router.navigate(['/courses']);
+      },
+      error: () => {
+        this.showDeleteModal.set(false);
+        toast.error('Failed to delete course', { description: 'Please try again.' });
+      },
     });
   }
 

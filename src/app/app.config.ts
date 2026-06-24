@@ -3,8 +3,12 @@ import { provideRouter } from '@angular/router';
 import { provideIcons } from '@ng-icons/core';
 import {
   lucideChevronLeft,
+  lucideCircleCheck,
   lucideEye,
   lucideInbox,
+  lucideInfo,
+  lucideLoader2,
+  lucideOctagonX,
   lucidePencil,
   lucidePlus,
   lucideSearch,
@@ -21,8 +25,12 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideIcons({
       lucideChevronLeft,
+      lucideCircleCheck,
       lucideEye,
       lucideInbox,
+      lucideInfo,
+      lucideLoader2,
+      lucideOctagonX,
       lucidePencil,
       lucidePlus,
       lucideSearch,
