@@ -1,10 +1,10 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
-import { HlmAlertDialogContent, HlmAlertDialogHeader, HlmAlertDialogTitle, HlmAlertDialogDescription, HlmAlertDialogFooter, HlmAlertDialogCancel, HlmAlertDialogAction } from '@spartan-ng/helm/alert-dialog';
+import { HlmButton } from '@spartan-ng/helm/button';
 
 @Component({
   selector: 'app-confirmation-modal',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [HlmAlertDialogContent, HlmAlertDialogHeader, HlmAlertDialogTitle, HlmAlertDialogDescription, HlmAlertDialogFooter, HlmAlertDialogCancel, HlmAlertDialogAction],
+  imports: [HlmButton],
   templateUrl: './confirmation-modal.html',
   styleUrls: ['./confirmation-modal.css'],
 })

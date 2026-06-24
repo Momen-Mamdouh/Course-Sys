@@ -72,9 +72,9 @@ export class CourseDetail {
 
   protected onDeleteConfirm(): void {
     this.courseService.deleteCourse(this.courseId).subscribe(() => {
+      this.showDeleteModal.set(false);
       this.router.navigate(['/courses']);
     });
-    this.showDeleteModal.set(false);
   }
 
   protected onDeleteCancel(): void {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
-import { Course } from '../interfaces/course';
+import { Course } from '@module/core/interfaces/course';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {

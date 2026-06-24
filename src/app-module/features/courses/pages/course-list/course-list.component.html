@@ -1,0 +1,51 @@
+<div class="mx-auto max-w-6xl px-4 py-8">
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-foreground">Courses</h1>
+    <button hlmBtn (click)="onAdd()">
+      <ng-icon name="lucidePlus" size="16" class="mr-1" />
+      Add Course
+    </button>
+  </div>
+
+  <div class="mb-4">
+    <app-module-search-input
+      [value]="searchQuery"
+      (valueChange)="onSearch($event)"
+    />
+  </div>
+
+  <app-module-skeleton-table *ngIf="isLoading" [showActions]="true" />
+
+  <app-module-error-state
+    *ngIf="!isLoading && error"
+    [title]="error.title"
+    [message]="error.message"
+    (retry)="loadCourses()"
+  />
+
+  <app-module-empty-state
+    *ngIf="!isLoading && !error && courses.length === 0"
+    [title]="searchQuery ? 'No matching courses' : 'No courses yet'"
+    [message]="searchQuery ? 'Try a different search term.' : 'Get started by adding your first course.'"
+    [actionLabel]="searchQuery ? '' : 'Add Course'"
+    (action)="onAdd()"
+  />
+
+  <app-module-course-table
+    *ngIf="!isLoading && !error && courses.length > 0"
+    [courses]="courses"
+    (view)="onView($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  />
+</div>
+
+<app-module-confirmation-modal
+  [visible]="showDeleteModal"
+  title="Delete Course"
+  [message]="'Are you sure you want to delete ' + (deletingCourse?.courseName || '') + '?'"
+  confirmLabel="Delete"
+  cancelLabel="Cancel"
+  (confirm)="onDeleteConfirm()"
+  (cancel)="onDeleteCancel()"
+/>
