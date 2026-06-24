@@ -7,7 +7,7 @@
             <th hlmTh><div hlmSkeleton class="h-4 w-20"></div></th>
           }
           @if (showActions()) {
-            <th hlmTh class="text-right"><div hlmSkeleton class="ml-auto h-4 w-16"></div></th>
+            <th hlmTh class="text-end"><div hlmSkeleton class="ms-auto h-4 w-16"></div></th>
           }
         </tr>
       </thead>
@@ -18,7 +18,7 @@
               <td hlmTd><div hlmSkeleton class="h-4" [class]="colWidth(col)"></div></td>
             }
             @if (showActions()) {
-              <td hlmTd class="text-right">
+              <td hlmTd class="text-end">
                 <div class="flex justify-end gap-1">
                   <div hlmSkeleton class="size-6 rounded"></div>
                   <div hlmSkeleton class="size-6 rounded"></div>

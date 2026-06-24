@@ -6,20 +6,30 @@ import { toast } from '@spartan-ng/brain/sonner';
 import { CourseService } from '@/core/services/course-api';
 import { Course } from '@/core/interfaces/course';
 import { ErrorInfo } from '@/core/interfaces/error-info';
+import { TranslatePipe } from '@/shared/pipes/translate.pipe';
 import { SearchInput } from '@/shared/components/search-input/search-input';
 import { SkeletonTable } from '@/shared/components/skeleton-table/skeleton-table';
 import { CourseTable } from '@/shared/components/course-table/course-table';
 import { EmptyState } from '@/shared/components/empty-state/empty-state';
 import { ErrorState } from '@/shared/components/error-state/error-state';
 import { ConfirmationModal } from '@/shared/components/confirmation-modal/confirmation-modal';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
+import { TranslationService } from '@/core/services/translation-api';
 
 @Component({
   selector: 'app-course-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    NgIcon, HlmButton,
-    SearchInput, SkeletonTable, CourseTable,
-    EmptyState, ErrorState, ConfirmationModal,
+    NgIcon,
+    HlmButton,
+    TranslatePipe,
+    SearchInput,
+    SkeletonTable,
+    CourseTable,
+    EmptyState,
+    ErrorState,
+    ConfirmationModal,
+    HlmSelectImports,
   ],
   templateUrl: './course-list.html',
   styleUrls: ['./course-list.css'],
@@ -27,15 +37,30 @@ import { ConfirmationModal } from '@/shared/components/confirmation-modal/confir
 export class CourseList {
   private readonly courseService = inject(CourseService);
   private readonly router = inject(Router);
+  private readonly translationService = inject(TranslationService);
 
   protected courses = signal<Course[]>([]);
   protected isLoading = signal(true);
   protected error = signal<ErrorInfo | null>(null);
   protected searchQuery = signal('');
   protected allCourses: Course[] = [];
+  protected selectedStatus = signal('All');
 
   protected showDeleteModal = signal(false);
   protected deletingCourse = signal<Course | null>(null);
+
+  protected readonly statuses = [
+    { value: 'All', key: 'filter.all' },
+    { value: 'Active', key: 'course.form.statusActive' },
+    { value: 'Draft', key: 'course.form.statusDraft' },
+    { value: 'Archived', key: 'course.form.statusArchived' },
+  ];
+
+  protected readonly itemToString = (value: string | null): string => {
+    const option = this.statuses.find((s) => s.value === value);
+
+    return option ? this.translationService.translate(option.key) : '';
+  };
 
   constructor() {
     this.loadCourses();
@@ -78,7 +103,19 @@ export class CourseList {
   }
 
   private applyFilter(): void {
-    this.courses.set([...this.allCourses]);
+    const status = this.selectedStatus();
+
+    const filtered =
+      status === 'All'
+        ? this.allCourses
+        : this.allCourses.filter((course) => course.status === status);
+
+    this.courses.set(filtered);
+  }
+
+  protected onStatusChange(status: string): void {
+    this.selectedStatus.set(status);
+    this.applyFilter();
   }
 
   protected onAdd(): void {

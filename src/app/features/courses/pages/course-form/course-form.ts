@@ -10,6 +10,7 @@ import { HlmSpinner } from '@spartan-ng/helm/spinner';
 import { HlmTextarea } from '@spartan-ng/helm/textarea';
 import { CourseService } from '@/core/services/course-api';
 import { ErrorInfo } from '@/core/interfaces/error-info';
+import { TranslatePipe } from '@/shared/pipes/translate.pipe';
 import { LoadingIndicator } from '@/shared/components/loading-indicator/loading-indicator';
 import { ErrorState } from '@/shared/components/error-state/error-state';
 import { toast } from '@spartan-ng/brain/sonner';
@@ -18,9 +19,17 @@ import { toast } from '@spartan-ng/brain/sonner';
   selector: 'app-course-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    ReactiveFormsModule, NgIcon,
-    HlmInput, HlmLabel, HlmButton, HlmSpinner, HlmNativeSelect, HlmTextarea,
-    ErrorState, LoadingIndicator,
+    ReactiveFormsModule,
+    NgIcon,
+    TranslatePipe,
+    HlmInput,
+    HlmLabel,
+    HlmButton,
+    HlmSpinner,
+    HlmNativeSelect,
+    HlmTextarea,
+    ErrorState,
+    LoadingIndicator,
   ],
   templateUrl: './course-form.html',
   styleUrls: ['./course-form.css'],
@@ -37,13 +46,13 @@ export class CourseForm {
   private courseId = 0;
 
   protected form = new FormGroup({
-    courseName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    instructorName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    category: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    courseName: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    instructorName: new FormControl('', [Validators.required]),
+    category: new FormControl('', [Validators.required]),
     duration: new FormControl(1, [Validators.required, Validators.min(1)]),
     price: new FormControl(0, [Validators.required, Validators.min(0)]),
     status: new FormControl<'Active' | 'Draft' | 'Archived'>('Draft', Validators.required),
-    description: new FormControl(''),
+    description: new FormControl('', [Validators.max(500)]),
   });
 
   constructor() {
@@ -116,7 +125,9 @@ export class CourseForm {
       },
       error: () => {
         this.isSaving.set(false);
-        toast.error(this.isEdit() ? 'Failed to update course' : 'Failed to create course', { description: 'Please try again.' });
+        toast.error(this.isEdit() ? 'Failed to update course' : 'Failed to create course', {
+          description: 'Please try again.',
+        });
       },
     });
   }

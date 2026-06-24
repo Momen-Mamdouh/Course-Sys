@@ -15,12 +15,20 @@ import { CourseForm } from './pages/course-form/course-form.component';
 import { CourseDetail } from './pages/course-detail/course-detail.component';
 import { CourseList } from './pages/course-list/course-list.component';
 
+import {
+  HlmSelect,
+  HlmSelectContent,
+  HlmSelectGroup,
+  HlmSelectItem,
+  HlmSelectLabel,
+  HlmSelectTrigger,
+  HlmSelectValue,
+} from '@spartan-ng/helm/select';
+
+import { BrnSelectImports } from '@spartan-ng/brain/select';
+
 @NgModule({
-  declarations: [
-    CourseList,
-    CourseDetail,
-    CourseForm,
-  ],
+  declarations: [CourseList, CourseDetail, CourseForm],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -34,6 +42,14 @@ import { CourseList } from './pages/course-list/course-list.component';
     HlmSpinner,
     HlmNativeSelect,
     HlmTextarea,
+    HlmSelect,
+    HlmSelectTrigger,
+    HlmSelectContent,
+    HlmSelectValue,
+    HlmSelectGroup,
+    HlmSelectLabel,
+    HlmSelectItem,
+    ...BrnSelectImports,
   ],
 })
 export class CoursesModule {}

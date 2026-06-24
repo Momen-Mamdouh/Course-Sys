@@ -5,12 +5,12 @@
     [placeholder]="placeholder"
     [value]="value"
     (input)="onInput($event)"
-    class="pl-10"
-    aria-label="Search courses"
+    class="ps-10"
+    [attr.aria-label]="'search.ariaLabel' | translate"
   />
   <ng-icon
     name="lucideSearch"
-    class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+    class="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground"
     size="16"
     aria-hidden="true"
   />

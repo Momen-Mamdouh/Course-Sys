@@ -1,11 +1,12 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { NgIcon } from '@ng-icons/core';
+import { TranslatePipe } from '@/shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-search-input',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [HlmInput, NgIcon],
+  imports: [HlmInput, NgIcon, TranslatePipe],
   templateUrl: './search-input.html',
   styleUrls: ['./search-input.css'],
 })
