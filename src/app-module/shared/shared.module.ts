@@ -8,6 +8,7 @@ import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmEmptyImports } from '@spartan-ng/helm/empty';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSkeleton } from '@spartan-ng/helm/skeleton';
+import { HlmToaster } from '@spartan-ng/helm/sonner';
 import { HlmSpinner } from '@spartan-ng/helm/spinner';
 import { HlmTableImports } from '@spartan-ng/helm/table';
 import { ConfirmationModal } from './components/confirmation-modal/confirmation-modal.component';
@@ -41,6 +42,7 @@ import { StatusBadge } from './components/status-badge/status-badge.component';
     HlmBadge,
     HlmButton,
     HlmSkeleton,
+    HlmToaster,
     ...HlmAlertImports,
     ...HlmAlertDialogImports,
     ...HlmEmptyImports,
@@ -56,6 +58,7 @@ import { StatusBadge } from './components/status-badge/status-badge.component';
     CourseTable,
     SkeletonTable,
     SkeletonDetail,
+    HlmToaster,
   ],
 })
 export class SharedModule {}

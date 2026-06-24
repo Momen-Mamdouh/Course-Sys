@@ -42,6 +42,7 @@
     "embla-carousel-angular": "^21.0.0",
     "ngx-scrollbar": "^19.1.5",
     "rxjs": "~7.8.0",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
     "tslib": "^2.3.0"
   },

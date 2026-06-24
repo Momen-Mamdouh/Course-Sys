@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '@module/core/services/course-api';
+import { ErrorInfo } from '@module/core/interfaces/error-info';
+import { toast } from '@spartan-ng/brain/sonner';
 
 @Component({
   selector: 'app-module-course-form',
@@ -13,12 +15,14 @@ import { CourseService } from '@module/core/services/course-api';
 export class CourseForm implements OnInit {
   isEdit = false;
   isSaving = false;
+  isLoading = false;
+  error: ErrorInfo | null = null;
   private courseId = 0;
 
   form = new FormGroup({
-    courseName: new FormControl('', Validators.required),
-    instructorName: new FormControl('', Validators.required),
-    category: new FormControl('', Validators.required),
+    courseName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    instructorName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    category: new FormControl('', [Validators.required, Validators.minLength(2)]),
     duration: new FormControl(1, [Validators.required, Validators.min(1)]),
     price: new FormControl(0, [Validators.required, Validators.min(0)]),
     status: new FormControl<'Active' | 'Draft' | 'Archived'>('Draft', Validators.required),
@@ -41,20 +45,32 @@ export class CourseForm implements OnInit {
     }
   }
 
-  private loadCourse(): void {
-    this.courseService.getCourseById(this.courseId).subscribe((course) => {
-      if (course) {
-        this.form.patchValue({
-          courseName: course.courseName,
-          instructorName: course.instructorName,
-          category: course.category,
-          duration: course.duration,
-          price: course.price,
-          status: course.status,
-          description: course.description || '',
-        });
+  loadCourse(): void {
+    this.isLoading = true;
+    this.error = null;
+    this.courseService.getCourseById(this.courseId).subscribe({
+      next: (course) => {
+        if (course) {
+          this.form.patchValue({
+            courseName: course.courseName,
+            instructorName: course.instructorName,
+            category: course.category,
+            duration: course.duration,
+            price: course.price,
+            status: course.status,
+            description: course.description || '',
+          });
+        } else {
+          this.error = { title: 'Course not found', message: 'This course does not exist.' };
+        }
+        this.isLoading = false;
         this.cdr.markForCheck();
-      }
+      },
+      error: () => {
+        this.error = { title: 'Failed to load course', message: 'Please try again.' };
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
     });
   }
 
@@ -84,9 +100,16 @@ export class CourseForm implements OnInit {
       ? this.courseService.updateCourse(this.courseId, data)
       : this.courseService.createCourse(data);
 
-    action.subscribe(() => {
-      this.isSaving = false;
-      this.router.navigate(['/courses']);
+    action.subscribe({
+      next: () => {
+        this.isSaving = false;
+        toast.success(this.isEdit ? 'Course updated' : 'Course created');
+        this.router.navigate(['/courses']);
+      },
+      error: () => {
+        this.isSaving = false;
+        toast.error(this.isEdit ? 'Failed to update course' : 'Failed to create course', { description: 'Please try again.' });
+      },
     });
   }
 }

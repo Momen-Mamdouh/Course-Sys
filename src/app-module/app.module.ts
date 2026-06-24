@@ -3,8 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgIconsModule } from '@ng-icons/core';
 import {
   lucideChevronLeft,
+  lucideCircleCheck,
   lucideEye,
   lucideInbox,
+  lucideInfo,
+  lucideLoader2,
+  lucideOctagonX,
   lucidePencil,
   lucidePlus,
   lucideSearch,
@@ -24,8 +28,12 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     NgIconsModule.withIcons({
       lucideChevronLeft,
+      lucideCircleCheck,
       lucideEye,
       lucideInbox,
+      lucideInfo,
+      lucideLoader2,
+      lucideOctagonX,
       lucidePencil,
       lucidePlus,
       lucideSearch,

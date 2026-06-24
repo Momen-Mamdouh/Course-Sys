@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '@module/core/services/course-api';
 import { Course } from '@module/core/interfaces/course';
 import { ErrorInfo } from '@module/core/interfaces/error-info';
+import { toast } from '@spartan-ng/brain/sonner';
 
 @Component({
   selector: 'app-module-course-detail',
@@ -65,9 +66,16 @@ export class CourseDetail implements OnInit {
   }
 
   onDeleteConfirm(): void {
-    this.courseService.deleteCourse(this.courseId).subscribe(() => {
-      this.showDeleteModal = false;
-      this.router.navigate(['/courses']);
+    this.courseService.deleteCourse(this.courseId).subscribe({
+      next: () => {
+        this.showDeleteModal = false;
+        toast.success('Course deleted');
+        this.router.navigate(['/courses']);
+      },
+      error: () => {
+        this.showDeleteModal = false;
+        toast.error('Failed to delete course', { description: 'Please try again.' });
+      },
     });
   }
 
