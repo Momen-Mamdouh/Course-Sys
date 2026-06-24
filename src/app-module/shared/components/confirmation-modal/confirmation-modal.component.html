@@ -1,15 +1,13 @@
 <div *ngIf="visible" class="fixed inset-0 z-50 flex items-center justify-center">
   <div class="fixed inset-0 bg-black/10 backdrop-blur-xs" (click)="cancel.emit()"></div>
-  <div hlmAlertDialogContent class="relative z-10 mx-4">
-    <div hlmAlertDialogHeader>
-      <h3 *ngIf="title" hlmAlertDialogTitle>{{ title }}</h3>
-      <p *ngIf="message" hlmAlertDialogDescription>{{ message }}</p>
-    </div>
-    <div hlmAlertDialogFooter>
-      <button hlmAlertDialogCancel (click)="cancel.emit()">
+  <div class="relative z-10 mx-4 w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-lg">
+    <h3 *ngIf="title" class="mb-2 text-lg font-semibold text-foreground">{{ title }}</h3>
+    <p *ngIf="message" class="mb-6 text-sm text-muted-foreground">{{ message }}</p>
+    <div class="flex justify-end gap-2">
+      <button hlmBtn variant="outline" (click)="cancel.emit()">
         {{ cancelLabel }}
       </button>
-      <button hlmAlertDialogAction variant="destructive" (click)="confirm.emit()">
+      <button hlmBtn variant="destructive" (click)="confirm.emit()">
         {{ confirmLabel }}
       </button>
     </div>

@@ -92,11 +92,14 @@ export class CourseList {
     const course = this.deletingCourse();
     if (course) {
       this.courseService.deleteCourse(course.id).subscribe(() => {
+        this.showDeleteModal.set(false);
+        this.deletingCourse.set(null);
         this.loadCourses();
       });
+    } else {
+      this.showDeleteModal.set(false);
+      this.deletingCourse.set(null);
     }
-    this.showDeleteModal.set(false);
-    this.deletingCourse.set(null);
   }
 
   protected onDeleteCancel(): void {

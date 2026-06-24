@@ -1,0 +1,70 @@
+<div class="mx-auto max-w-2xl px-4 py-8">
+  <button hlmBtn variant="ghost" size="sm" class="mb-4" (click)="goBack()">
+    <ng-icon name="lucideChevronLeft" size="16" class="mr-1" />
+    Back to Courses
+  </button>
+
+  <app-module-skeleton-detail *ngIf="isLoading" />
+
+  <app-module-error-state
+    *ngIf="!isLoading && error"
+    [title]="error.title"
+    [message]="error.message"
+    (retry)="loadCourse()"
+  />
+
+  <div *ngIf="!isLoading && !error && course" class="rounded-lg border border-border bg-card p-6">
+    <div class="mb-6 flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-foreground">{{ course.courseName }}</h1>
+        <p class="text-sm text-muted-foreground">{{ course.instructorName }}</p>
+      </div>
+      <span hlmBadge [variant]="badgeVariant(course.status)">{{ course.status }}</span>
+    </div>
+
+    <div class="mb-6 grid grid-cols-2 gap-4 text-sm">
+      <div>
+        <span class="block text-muted-foreground">Category</span>
+        <span class="font-medium text-foreground">{{ course.category }}</span>
+      </div>
+      <div>
+        <span class="block text-muted-foreground">Duration</span>
+        <span class="font-medium text-foreground">{{ course.duration }} hours</span>
+      </div>
+      <div>
+        <span class="block text-muted-foreground">Price</span>
+        <span class="font-medium text-foreground">{{ course.price | currency }}</span>
+      </div>
+      <div>
+        <span class="block text-muted-foreground">Created</span>
+        <span class="font-medium text-foreground">{{ course.createdDate }}</span>
+      </div>
+    </div>
+
+    <div class="mb-6" *ngIf="course.description">
+      <h3 class="mb-1 text-sm font-medium text-muted-foreground">Description</h3>
+      <p class="text-sm text-foreground">{{ course.description }}</p>
+    </div>
+
+    <div class="flex gap-2">
+      <button hlmBtn variant="outline" size="sm" (click)="onEdit()">
+        <ng-icon name="lucidePencil" size="16" class="mr-1" />
+        Edit
+      </button>
+      <button hlmBtn variant="destructive" size="sm" (click)="onDelete()">
+        <ng-icon name="lucideTrash" size="16" class="mr-1" />
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-module-confirmation-modal
+  [visible]="showDeleteModal"
+  title="Delete Course"
+  [message]="'Delete ' + (course?.courseName || '') + '?'"
+  confirmLabel="Delete"
+  cancelLabel="Cancel"
+  (confirm)="onDeleteConfirm()"
+  (cancel)="onDeleteCancel()"
+/>

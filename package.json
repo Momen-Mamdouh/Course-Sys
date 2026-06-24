@@ -3,8 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve ElectroPiTask",
+    "build": "ng build ElectroPiTask",
+    "serve:standalone": "ng serve ElectroPiTask",
+    "serve:module": "ng serve ElectroPiTaskModule",
+    "build:module": "ng build ElectroPiTaskModule",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

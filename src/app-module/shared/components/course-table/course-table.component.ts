@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, EventEmitter, Input, Output } from '@angular/core';
-import { Course } from '../../../core/interfaces/course';
+import { Course } from '@module/core/interfaces/course';
 
 @Component({
   selector: 'app-module-course-table',
